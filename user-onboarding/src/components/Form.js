@@ -4,13 +4,14 @@ import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
 
 const Form = ({ errors, touched, values, handleSubmit, status }) => {
-    const [animals, setAnimals] = useState([]);
-    console.log(animals);
+    
+    // const [animals, setAnimals] = useState([]);
+    // console.log(animals);
   
-    useEffect(() => {
-      console.log('infinite loop?');
-      setAnimals([...animals, status]);
-    }, [status]);
+    // useEffect(() => {
+    //   console.log('infinite loop?');
+    //   setAnimals([...animals, status]);
+    // }, [status]);
   
     return (
       <div className="form-container">
@@ -41,5 +42,48 @@ const Form = ({ errors, touched, values, handleSubmit, status }) => {
         </Form>
       </div>
     );
-  };
+};
 
+
+const FormikForm = withFormik({
+    mapPropsToValues({ name, email, password, terms }) {
+      return {
+        name: name || "",
+        email: email || "",
+        password: password || "",
+        terms: terms || false,
+      };
+    },
+  
+    validationSchema: Yup.object().shape({
+        name: Yup
+        .string()
+        .required("Please enter your name"),
+        email: Yup
+        .string()
+        .email()
+        .required("Please enter a valid email"),
+        password: Yup
+        .string()
+        .min(8)
+        .required("Password must be atleast 8 characters"),
+        terms: Yup
+        .boolean()
+        .oneOf([true], 'Must Accept Terms and Conditions'),
+        }),
+  
+    handleSubmit(values, { setStatus }) {
+        axios
+            .post('https://reqres.in/api/users/', values)
+            .then(response => {
+                console.log("post api response data", response)
+                setStatus(response.data);
+            })
+            .catch(error => 
+                console.log("The api is currently down.", error.response)
+            );
+    }
+})(Form); // currying functions in Javascript
+  
+export default FormikForm;
+  
