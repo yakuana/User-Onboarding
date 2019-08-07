@@ -5,3 +5,17 @@
 .error {
   color: red;
 }
+
+.form-container {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-around; 
+}
+
+.form {
+  width: 30%; 
+  margin: 0 auto; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-around; 
+}

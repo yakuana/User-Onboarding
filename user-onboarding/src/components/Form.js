@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
 import UserCard from './UserCard';
+import { TextField } from 'formik-material-ui';
 
 const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     
@@ -20,30 +21,35 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     return (
       <div className="form-container">
         <h1>Sign Up</h1>
-        <Form>
-          <Field type="text" name="name" placeholder="Name" />
-          {touched.name && errors.name && (
-            <p className="error">{errors.name}</p>
-          )}
-  
-          <Field type="text" name="email" placeholder="Email" />
-          {touched.email && errors.email && <p className="error">{errors.email}</p>}
+        <Form className="form">
+            <Field type="text" name="name" placeholder="Name" component={TextField}/>
+            {touched.name && errors.name && ( <p className="error">{errors.name}</p> )}
+    
+            <Field type="text" name="email" placeholder="Email" component={TextField}/>
+            {touched.email && errors.email && <p className="error">{errors.email}</p>}
 
-          <Field type="text" name="password" placeholder="Password" />
-          {touched.password && errors.password && <p className="error">{errors.password}</p>}
-  
-          <label className="checkbox-container">
-            Terms of Service 
-            <Field
-              type="checkbox"
-              name="terms"
-              checked={values.terms}
-            />
-            <span className="checkmark"/>
-          </label>
-  
-          <button type="submit">Submit</button>
-        </Form>
+            <Field type="text" name="password" placeholder="Password" component={TextField}/>
+            {touched.password && errors.password && <p className="error">{errors.password}</p>}
+
+            <Field component="select" name="role">
+                <option>Please Choose a Role</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+                <option value="teaching assistant">Teaching Assistant</option>
+            </Field>
+    
+            <label className="checkbox-container">
+                Terms of Service 
+                <Field
+                type="checkbox"
+                name="terms"
+                checked={values.terms}
+                />
+                <span className="checkmark"/>
+            </label>
+    
+            <button type="submit">Submit</button>
+            </Form>
 
         {users.map(user => (
             <UserCard key={user.id} user={user}/>
@@ -57,12 +63,13 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
 const FormikUserForm = withFormik({
     
     // making sure each prop has a default value if given value is undefined 
-    mapPropsToValues({ name, email, password, terms }) {
+    mapPropsToValues({ name, email, password, terms, role }) {
       return {
         name: name || "",
         email: email || "",
         password: password || "",
         terms: terms || false,
+        role: role || "",
       };
     },
     
