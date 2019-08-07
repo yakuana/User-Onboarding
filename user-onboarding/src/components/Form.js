@@ -3,15 +3,19 @@ import axios from 'axios';
 import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
 
-const Form = ({ errors, touched, values, handleSubmit, status }) => {
+const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     
-    // const [animals, setAnimals] = useState([]);
-    // console.log(animals);
-  
-    // useEffect(() => {
-    //   console.log('infinite loop?');
-    //   setAnimals([...animals, status]);
-    // }, [status]);
+    // hook for keeping track of users 
+    const [users, setUsers] = useState([]);
+    console.log("current user", users);
+    
+    // updates users if change has occured 
+    useEffect(() => {
+        if (status) {
+            // change has occured, so update users array 
+            setUsers([...users, status])
+        }
+    }, [status]);
   
     return (
       <div className="form-container">
@@ -35,17 +39,22 @@ const Form = ({ errors, touched, values, handleSubmit, status }) => {
               name="terms"
               checked={values.terms}
             />
-            <span className="checkmark" />
+            <span className="checkmark"/>
           </label>
   
           <button type="submit">Submit</button>
         </Form>
+
+        {users.map(user => (
+            <p key={user.id}>{user.name}</p>
+        ))}
+
       </div>
     );
 };
 
 
-const FormikForm = withFormik({
+const FormikUserForm = withFormik({
     mapPropsToValues({ name, email, password, terms }) {
       return {
         name: name || "",
@@ -69,7 +78,7 @@ const FormikForm = withFormik({
         .required("Password must be atleast 8 characters"),
         terms: Yup
         .boolean()
-        .oneOf([true], 'Must Accept Terms and Conditions'),
+        .oneOf([true], "Must Accept Terms and Conditions"),
         }),
   
     handleSubmit(values, { setStatus }) {
@@ -83,7 +92,7 @@ const FormikForm = withFormik({
                 console.log("The api is currently down.", error.response)
             );
     }
-})(Form); // currying functions in Javascript
+})(UserForm); // currying functions in Javascript
   
-export default FormikForm;
+export default FormikUserForm;
   
