@@ -22,31 +22,73 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
       <div className="form-container">
         <h1>Sign Up</h1>
         <Form className="form">
-            <Field type="text" name="name" placeholder="Name" component={TextField}/>
+            
+            {/* name */}
+            <Field 
+                type="text" 
+                name="name" 
+                placeholder="Name" 
+                component={TextField}
+            />
             {touched.name && errors.name && ( <p className="error">{errors.name}</p> )}
-    
+
+            {/* email */}
             <Field type="text" name="email" placeholder="Email" component={TextField}/>
             {touched.email && errors.email && <p className="error">{errors.email}</p>}
 
-            <Field type="text" name="password" placeholder="Password" component={TextField}/>
+            {/* password */}
+            <Field 
+                type="text" 
+                name="password" 
+                placeholder="Password" 
+                component={TextField}
+            />
             {touched.password && errors.password && <p className="error">{errors.password}</p>}
 
-            <Field component="select" name="role">
+            {/* role */}
+            <Field 
+                component="select" 
+                name="role"
+                >
                 <option>Please Choose a Role</option>
                 <option value="teacher">Teacher</option>
                 <option value="student">Student</option>
                 <option value="teaching assistant">Teaching Assistant</option>
             </Field>
-    
+
+             {/* gender */}
+             <Field 
+                component="select" 
+                name="gender"
+                >
+                <option>Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="unknown">I'd rather not say</option>
+            </Field>
+
+            {/* terms of service */}
             <label className="checkbox-container">
                 Terms of Service 
                 <Field
-                type="checkbox"
-                name="terms"
-                checked={values.terms}
+                    type="checkbox"
+                    name="terms"
+                    checked={values.terms}
                 />
                 <span className="checkmark"/>
             </label>
+
+            {/* bio */}
+            <Field
+                component="textarea"
+                type="text"
+                name="bio"
+                placeholder="Tell us about yourself..."
+            />
+            {touched.notes && errors.notes && (
+            <p className="error">{errors.notes}</p>
+            )}
     
             <button type="submit">Submit</button>
             </Form>
@@ -63,13 +105,15 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
 const FormikUserForm = withFormik({
     
     // making sure each prop has a default value if given value is undefined 
-    mapPropsToValues({ name, email, password, terms, role }) {
+    mapPropsToValues({ name, email, password, terms, role, bio, gender }) {
       return {
         name: name || "",
         email: email || "",
         password: password || "",
         terms: terms || false,
         role: role || "",
+        bio: bio || "", 
+        gender: gender || "",
       };
     },
     
