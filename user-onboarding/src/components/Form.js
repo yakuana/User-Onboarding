@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
+import UserCard from './UserCard';
 
 const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     
@@ -46,15 +47,17 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
         </Form>
 
         {users.map(user => (
-            <p key={user.id}>{user.name}</p>
+            <UserCard key={user.id} user={user}/>
         ))}
 
       </div>
     );
 };
 
-
+// using formik 
 const FormikUserForm = withFormik({
+    
+    // making sure each prop has a default value if given value is undefined 
     mapPropsToValues({ name, email, password, terms }) {
       return {
         name: name || "",
@@ -63,7 +66,8 @@ const FormikUserForm = withFormik({
         terms: terms || false,
       };
     },
-  
+    
+    // use yup to enforce input requirements 
     validationSchema: Yup.object().shape({
         name: Yup
         .string()
@@ -79,20 +83,27 @@ const FormikUserForm = withFormik({
         terms: Yup
         .boolean()
         .oneOf([true], "Must Accept Terms and Conditions"),
-        }),
-  
+    }),
+    
+    // update values and set status 
     handleSubmit(values, { setStatus }) {
         axios
+            // free api that simulates a post request for any data 
             .post('https://reqres.in/api/users/', values)
+
             .then(response => {
-                console.log("post api response data", response)
+                // successful 
+                console.log("post api response object", response)
                 setStatus(response.data);
             })
+
             .catch(error => 
+                // unsuccessful 
                 console.log("The api is currently down.", error.response)
             );
     }
-})(UserForm); // currying functions in Javascript
+
+})(UserForm); // currying functions
   
 export default FormikUserForm;
   
