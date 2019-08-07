@@ -8,7 +8,6 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     
     // hook for keeping track of users 
     const [users, setUsers] = useState([]);
-    console.log("current user", users);
     
     // updates users if change has occured 
     useEffect(() => {
@@ -74,7 +73,7 @@ const FormikUserForm = withFormik({
         .required("Please enter your name"),
         email: Yup
         .string()
-        .email()
+        .email("Please enter a valid email")
         .required("Please enter a valid email"),
         password: Yup
         .string()
@@ -95,6 +94,7 @@ const FormikUserForm = withFormik({
                 // successful 
                 console.log("post api response object", response)
                 setStatus(response.data);
+                console.log("current user", values);
             })
 
             .catch(error => 
