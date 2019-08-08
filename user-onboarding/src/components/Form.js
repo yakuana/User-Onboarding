@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
 import UserCard from './UserCard';
-import { TextField } from 'formik-material-ui';
+// import { TextField } from 'formik-material-ui';
 
 const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     
@@ -14,7 +14,7 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
     useEffect(() => {
         if (status) {
             // change has occured, so update users array 
-            setUsers([...users, status])
+            setUsers(users => [...users, status])
         }
     }, [status]);
   
@@ -28,12 +28,11 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                 type="text" 
                 name="name" 
                 placeholder="Name" 
-                component={TextField}
             />
             {touched.name && errors.name && ( <p className="error">{errors.name}</p> )}
 
             {/* email */}
-            <Field type="text" name="email" placeholder="Email" component={TextField}/>
+            <Field type="text" name="email" placeholder="Email"/>
             {touched.email && errors.email && <p className="error">{errors.email}</p>}
 
             {/* password */}
@@ -41,7 +40,6 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                 type="text" 
                 name="password" 
                 placeholder="Password" 
-                component={TextField}
             />
             {touched.password && errors.password && <p className="error">{errors.password}</p>}
 
@@ -55,6 +53,7 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                 <option value="student">Student</option>
                 <option value="teaching assistant">Teaching Assistant</option>
             </Field>
+            {touched.role && errors.role && <p className="error">{errors.role}</p>}
 
              {/* gender */}
              <Field 
@@ -67,6 +66,7 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                 <option value="other">Other</option>
                 <option value="unknown">I'd rather not say</option>
             </Field>
+            {touched.gender && errors.gender && <p className="error">{errors.gender}</p>}
 
             {/* terms of service */}
             <label className="checkbox-container">
@@ -76,8 +76,9 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                     name="terms"
                     checked={values.terms}
                 />
-                <span className="checkmark"/>
+                {/* <span className="checkmark"/> */}
             </label>
+            {touched.terms && errors.terms && <p className="error">{errors.terms}</p>}
 
             {/* bio */}
             <Field
@@ -86,12 +87,10 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                 name="bio"
                 placeholder="Tell us about yourself..."
             />
-            {touched.notes && errors.notes && (
-            <p className="error">{errors.notes}</p>
-            )}
+           {touched.bio && errors.bio && <p className="error">{errors.bio}</p>}
     
             <button type="submit">Submit</button>
-            </Form>
+        </Form>
 
         {users.map(user => (
             <UserCard key={user.id} user={user}/>
@@ -133,6 +132,15 @@ const FormikUserForm = withFormik({
         terms: Yup
         .boolean()
         .oneOf([true], "Must Accept Terms and Conditions"),
+        role: Yup
+        .string()
+        .required(),
+        gender: Yup
+        .string()
+        .required(),
+        bio: Yup
+        .string()
+        .required()
     }),
     
     // update values and set status 
