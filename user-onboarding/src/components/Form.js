@@ -27,12 +27,18 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
             <Field 
                 type="text" 
                 name="name" 
-                placeholder="Name" 
+                placeholder="Name"
+                className="field" 
             />
             {touched.name && errors.name && ( <p className="error">{errors.name}</p> )}
 
             {/* email */}
-            <Field type="text" name="email" placeholder="Email"/>
+            <Field 
+                type="text" 
+                name="email"
+                placeholder="Email"
+                className="field" 
+            />
             {touched.email && errors.email && <p className="error">{errors.email}</p>}
 
             {/* password */}
@@ -40,6 +46,7 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                 type="text" 
                 name="password" 
                 placeholder="Password" 
+                className="field" 
             />
             {touched.password && errors.password && <p className="error">{errors.password}</p>}
 
@@ -47,6 +54,7 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
             <Field 
                 component="select" 
                 name="role"
+                className="field" 
                 >
                 <option>Please Choose a Role</option>
                 <option value="teacher">Teacher</option>
@@ -59,6 +67,7 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
              <Field 
                 component="select" 
                 name="gender"
+                className="field" 
                 >
                 <option>Gender</option>
                 <option value="male">Male</option>
@@ -68,6 +77,16 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
             </Field>
             {touched.gender && errors.gender && <p className="error">{errors.gender}</p>}
 
+            {/* bio */}
+            <Field
+                component="textarea"
+                type="text"
+                name="bio"
+                placeholder="Tell us about yourself..."
+                className="field" 
+            />
+           {touched.bio && errors.bio && <p className="error">{errors.bio}</p>}
+
             {/* terms of service */}
             <label className="checkbox-container">
                 Terms of Service 
@@ -76,20 +95,10 @@ const UserForm = ({ errors, touched, values, handleSubmit, status }) => {
                     name="terms"
                     checked={values.terms}
                 />
-                {/* <span className="checkmark"/> */}
             </label>
             {touched.terms && errors.terms && <p className="error">{errors.terms}</p>}
-
-            {/* bio */}
-            <Field
-                component="textarea"
-                type="text"
-                name="bio"
-                placeholder="Tell us about yourself..."
-            />
-           {touched.bio && errors.bio && <p className="error">{errors.bio}</p>}
     
-            <button type="submit">Submit</button>
+            <button type="submit" className="button">Submit</button>
         </Form>
 
         {users.map(user => (
